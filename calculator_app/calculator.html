@@ -1,0 +1,24 @@
+<!DOCTYPE = HTML>
+<html>
+    <head>
+        <title>Calculator</title>
+    </head>
+    <body>
+        <h1>Calculator</h1>
+        <button>1</button>
+        <button>2</button>
+        <button>3</button>
+        <button>4</button>
+        <button>5</button>
+        <button>6</button>
+        <button>7</button>
+        <button>8</button>
+        <button>9</button>
+        <script>
+            const buttonsArr = Array.from(document.getElementsByTagName("button"));
+            for (let i = 0; i < buttonsArr.length; i++) {
+                console.log(buttonsArr[i].innerText);
+            }
+        </script>
+    </body>
+</html>
