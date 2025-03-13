@@ -77,7 +77,16 @@
       const numbersArr = Array.from(document.getElementsByClassName("number"));
       const operatorsArr = Array.from(document.getElementsByClassName("operator"));
       const parenthesisArr = Array.from(document.getElementsByClassName("parenthesis"));
+      const equalsArr = Array.from(document.getElementsByClassName("equals"));
       const numberStrs = "0123456789".split("");
+
+      class Node {
+        constructor(val = null, left = null, right = null) {
+          this.val = val;
+          this.left = left;
+          this.right = right;
+        }
+      }
 
       const data = {
         displayString: "0",
@@ -123,6 +132,74 @@
 
           data.updateDisplay();
         },
+
+        createExpressionTree: (newChar) => {
+          if (newChar != "=") {
+            return;
+          }
+
+          let expressionArr = [];
+
+          let number = "";
+          for (let i = 0; i < data.displayString.length; i++) {
+            if (numberStrs.includes(data.displayString[i])) {
+              number += data.displayString[i];
+            } else {
+              if (number != "") expressionArr.push(number);
+              expressionArr.push(data.displayString[i]);
+              number = "";
+            }
+          }
+
+          if (number != "") expressionArr.push(number);
+
+          let pemdasValues = {'+': 1, '-': 1, '*': 2, '/': 2};
+          let operands = [], operators = [];
+
+          expressionArr.forEach(piece => {
+            if (!isNaN(piece)) {
+              operands.push(new Node(piece));
+            } else if (piece in pemdasValues) {
+              let top = operators[operators.length - 1];
+              while (operators.length && pemdasValues[top] > pemdasValues[piece]) {
+                operands.push(new Node(operators.pop()));
+              }
+              operators.push(piece);
+            }
+          });
+
+          while (operators.length) {
+            operands.push(new Node(operators.pop()));
+          }
+
+          let treeStack = [];
+
+          operands.forEach(node => {
+            if (!isNaN(node.val)) {
+              treeStack.push(node);
+            } else {
+              let right = treeStack.pop(), left = treeStack.pop();
+              node.right = right;
+              node.left = left;
+              treeStack.push(node);
+            }
+          });
+
+          return treeStack[0];
+        },
+
+        calculate: (head) => {
+          if (!isNaN(head.val)) return parseFloat(head.val);
+
+          let left = data.calculate(head.left), right = data.calculate(head.right);
+          switch (head.val) {
+            case '+': return left + right;
+            case '-': return left - right;
+            case '*': return left * right;
+            case '/': return left / right;
+          }
+        },
+
         updateDisplay: () => {
           const display = document.getElementById("display");
           display.innerText = data.displayString;
@@ -147,6 +224,13 @@
       parenthesisArr.map((elem, i) => {
         elem.addEventListener("click", (evt) => {
           data.appendStringParenthesis(elem.innerText);
+        });
+      });
+
+      equalsArr.map((elem, i) => {
+        elem.addEventListener("click", (evt) => {
+          data.displayString = data.calculate(data.createExpressionTree(elem.innerText)).toString();
+          data.updateDisplay();
         });
       });
     </script>
