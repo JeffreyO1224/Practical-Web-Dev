@@ -78,6 +78,7 @@
       const operatorsArr = Array.from(document.getElementsByClassName("operator"));
       const parenthesisArr = Array.from(document.getElementsByClassName("parenthesis"));
       const equalsArr = Array.from(document.getElementsByClassName("equals"));
+      const decimalArr = Array.from(document.getElementsByClassName("decimal"));
       const numberStrs = "0123456789".split("");
 
       class Node {
@@ -90,11 +91,13 @@
 
       const data = {
         displayString: "0",
-        appendStringNum: (newChar) => {
-          if (newChar === ".") {
-            //decimal + 0?
-          }
 
+        clearDivideBy0Message: () => {
+          if (data.displayString === 'Divide by 0 Error') data.displayString = "0";
+        },
+
+        appendStringNum: (newChar) => {
+          data.clearDivideBy0Message();
           if (numberStrs.includes(newChar)) {
             if (data.displayString === "0") {
               data.displayString = "";
@@ -104,7 +107,24 @@
           data.updateDisplay();
         },
 
+        appendStringDecimal: (newChar) => {
+          data.clearDivideBy0Message();
+          if (newChar != ".") return;
+
+          let expression = data.displayString.split(/[+\-*/()]+/);
+
+          let currentNum = expression[expression.length - 1];
+
+          for (let i = 0; i < currentNum.length; i++) {
+            if (currentNum[i] === '.') return;
+          }
+
+          data.displayString += newChar;
+          data.updateDisplay();
+        },
+
         appendStringOperator: (newChar) => {
+          data.clearDivideBy0Message();
           if (numberStrs.includes(data.displayString.slice(-1)) || data.displayString.slice(-1) === ")") {
             data.displayString += newChar;
           }
@@ -112,6 +132,7 @@
         },
 
         appendStringParenthesis: (newChar) => {
+          data.clearDivideBy0Message();
           if (newChar === ")") {
             if (data.displayString.split("(").length <= data.displayString.split(")").length) {
               //if there are not enough open parenthesis to add a closing parenthesis terminate early
@@ -134,15 +155,18 @@
         },
 
         createExpressionTree: (newChar) => {
+          data.clearDivideBy0Message();
           if (newChar != "=") {
             return;
           }
 
           let expressionArr = [];
-
           let number = "";
+
+          if (data.displayString[0] === '-') expressionArr.push('0');
+
           for (let i = 0; i < data.displayString.length; i++) {
-            if (numberStrs.includes(data.displayString[i])) {
+            if (numberStrs.includes(data.displayString[i]) || data.displayString[i] === '.') {
               number += data.displayString[i];
             } else {
               if (number != "") expressionArr.push(number);
@@ -153,18 +177,36 @@
 
           if (number != "") expressionArr.push(number);
 
-          let pemdasValues = {'+': 1, '-': 1, '*': 2, '/': 2};
+          let pemdasValues = {'+': 1, '-': 1, '*': 2, '/': 2, '(': 3};
           let operands = [], operators = [];
+          let lastElementNumber = false;
 
           expressionArr.forEach(piece => {
             if (!isNaN(piece)) {
               operands.push(new Node(piece));
+              lastElementNumber = true;
             } else if (piece in pemdasValues) {
               let top = operators[operators.length - 1];
-              while (operators.length && pemdasValues[top] > pemdasValues[piece]) {
+              while (operators.length && top != '(' && pemdasValues[top] >= pemdasValues[piece]) {
                 operands.push(new Node(operators.pop()));
+                top = operators[operators.length - 1];
               }
+              
+              if (lastElementNumber && piece === '(') operators.push('*');
+
               operators.push(piece);
+              lastElementNumber = false;
+            } else if (piece === ')') {
+              let top = operators[operators.length-1];
+              while (operators.length && top != '(') {
+                operands.push(new Node(operators.pop()));
+                top = operators[operators.length - 1];
+              }
+
+              if (!operators.length) return;
+              else operators.pop();
+
+              lastElementNumber = false;
             }
           });
 
@@ -196,7 +238,9 @@
             case '+': return left + right;
             case '-': return left - right;
             case '*': return left * right;
-            case '/': return left / right;
+            case '/': 
+              if (right === 0) return "Divide by 0 Error";
+              else return left / right;
           }
         },
 
@@ -231,6 +275,12 @@
         elem.addEventListener("click", (evt) => {
           data.displayString = data.calculate(data.createExpressionTree(elem.innerText)).toString();
           data.updateDisplay();
+        });
+      });
+
+      decimalArr.map((elem, i) => {
+        elem.addEventListener("click", (evt) => {
+          data.appendStringDecimal(elem.innerText);
         });
       });
     </script>
