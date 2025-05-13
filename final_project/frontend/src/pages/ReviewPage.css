@@ -1,0 +1,9 @@
+#review-page {
+    display: flex;
+    align-items: center;
+}
+
+#ratings-side {
+    display: flex;
+    justify-content: center;
+}

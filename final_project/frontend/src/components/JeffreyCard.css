@@ -1,0 +1,28 @@
+#jeffrey-card {
+    border: none;
+    border-color: black;
+    border-radius: 4rem;
+    justify-content: center;
+    width: 23vw;
+    height: 93vh;
+    box-shadow: 0px 0px 10px;
+    text-align: center;
+}
+
+#name-and-contact {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#jeffrey-img {
+    padding-top: 2vh;
+    border-radius: 50%;
+    height: 30vh;
+    width: auto;
+}
+
+#linkedin-logo {
+    padding-left: 1vw;
+    height: 4vh;
+}
