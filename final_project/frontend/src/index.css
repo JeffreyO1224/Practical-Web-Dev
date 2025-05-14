@@ -1,3 +1,5 @@
 body {
   font-family: "Merriweather", serif;
+  word-wrap: break-word;
+  width: 100vw;
 }
