@@ -5,7 +5,7 @@ function ReadMore( reviewText, setReadMore, setMoreText, setDots, setMaxHeight )
     
 }
 
-export default function Review({title, reviewer, rating, reviewText}) {
+export default function Review({title, reviewer, rating, reviewText, createdAt}) {
     const [ readMore, setReadMore ] = useState(false);
     const [ reviewTextLess, setReviewTextLess ] = useState(reviewText);
     const [ dots, setDots ] = useState('');
@@ -25,29 +25,37 @@ export default function Review({title, reviewer, rating, reviewText}) {
             width: '50vw',
             maxHeight: maxHeight,
         }}>
-            <h1>Title</h1>
-            <p id='review-text-less'style={{
-                flexWrap: 'wrap',
-            }}>
-                {reviewTextLess}
-                <span id='dots'>{dots}</span>
-                <span id='review-text-more'>{moreText}</span>
-            </p>
-            <button style={{
-                color: 'grey',
-                cursor: 'pointer',
-                border: 'none',
-                backgroundColor: 'transparent',
-                fontFamily: "Merriweather, serif",
-            }}
-            onClick={() => {
-                setReadMore(true);
-                setDots('');
-                setMoreText(reviewText.substring(300, reviewText.length));
-                setMaxHeight('none');
-            }}>
-                Read More
-            </button>
+            <div style={{margin: '2%'}}>
+                <div>
+                    <div style={{ fontSize: '1rem', color: '#f1c40f' }}>
+                    {'★'.repeat(Math.round(rating))}{'☆'.repeat(5 - Math.round(rating))}
+                    </div>
+                    <h2 id='title'>{title}</h2>
+                </div>
+                <h3>{reviewer}</h3>
+                <p id='review-text-less'style={{
+                    flexWrap: 'wrap',
+                }}>
+                    {reviewTextLess}
+                    <span id='dots'>{dots}</span>
+                    <span id='review-text-more'>{moreText}</span>
+                </p>
+                <button style={{
+                    color: 'grey',
+                    cursor: 'pointer',
+                    border: 'none',
+                    backgroundColor: 'transparent',
+                    fontFamily: "Merriweather, serif",
+                }}
+                onClick={() => {
+                    setReadMore(true);
+                    setDots('');
+                    setMoreText(reviewText.substring(300, reviewText.length));
+                    setMaxHeight('none');
+                }}>
+                    Read More
+                </button>
+            </div>
         </div>
     );
 }
