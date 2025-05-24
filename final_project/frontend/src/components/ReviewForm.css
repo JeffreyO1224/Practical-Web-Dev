@@ -1,0 +1,64 @@
+#review-form {
+    text-align: center;
+    margin-bottom: 24px;
+    width: 50vw;
+}
+
+#form {
+    background-color: #f4f4f4;
+    padding: 16px;
+    border-radius: 8px;
+    margin: 0 auto;
+    text-align: left;
+    box-shadow: 0px 0px 4px;
+}
+
+#form-input {
+    width: 97%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 2vh;
+}
+
+#cancel-button {
+    padding: 8px 16px;
+    background-color: #ccc;
+    color: black;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    height: auto;
+    min-height: 5vh;
+    width: 5vw;
+    font-size: 115%;
+    font-weight: bold;
+}
+
+#submit-button {
+    padding: 8px 16px;
+    background-color: blue;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    height: auto;
+    min-height: 5vh;
+    width: 5vw;
+    font-size: 115%;
+    font-weight: bold;
+}
+
+#create-review-button {
+    padding: 12px 24px;
+    background-color: blue;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 100%;
+    cursor: pointer;
+    min-height: 5vh;
+    height: auto;
+    width: 10vw;
+}

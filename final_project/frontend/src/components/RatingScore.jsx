@@ -25,11 +25,8 @@ export default function RatingScore({ratings}) {
     useEffect(() =>
         {
             if (!ratings) return;
-            else if (ratings.length > 1) {
-                setScore(ratings.reduce((a, b) => a.rating + b.rating) / ratings.length);
-            } else if (ratings.length == 1) {
-                setScore(ratings[0].rating / 1.0);
-            }
+            else if (ratings.length > 1) setScore(ratings.reduce((a, b) => a + b.rating, 0) * 1.0 / ratings.length);
+            else if (ratings.length == 1) setScore(ratings[0].rating * 1.0);
         }
     , [ratings]);
 
@@ -40,11 +37,21 @@ export default function RatingScore({ratings}) {
                 <div style={{ fontSize: '3rem', color: '#f1c40f' }}>
                 {'★'.repeat(Math.round(score))}{'☆'.repeat(5 - Math.round(score))}
                 </div>
-                <RatingBar rating={5} amount={distribution[4].count} percentage={distribution[4].percentage} />
-                <RatingBar rating={4} amount={distribution[3].count} percentage={distribution[3].percentage} />
-                <RatingBar rating={3} amount={distribution[2].count} percentage={distribution[2].percentage} />
-                <RatingBar rating={2} amount={distribution[1].count} percentage={distribution[1].percentage} />
-                <RatingBar rating={1} amount={distribution[0].count} percentage={distribution[0].percentage} />
+                <div id='rating-bar'>
+                    <RatingBar rating={5} amount={distribution[4].count} percentage={distribution[4].percentage} />
+                </div>
+                <div id='rating-bar'>
+                    <RatingBar rating={4} amount={distribution[3].count} percentage={distribution[3].percentage} />
+                </div>
+                <div id='rating-bar'>
+                    <RatingBar rating={3} amount={distribution[2].count} percentage={distribution[2].percentage} />
+                </div>
+                <div id='rating-bar'>
+                    <RatingBar rating={2} amount={distribution[1].count} percentage={distribution[1].percentage} />
+                </div>
+                <div id='rating-bar'>
+                    <RatingBar rating={1} amount={distribution[0].count} percentage={distribution[0].percentage} />
+                </div>
             </div>
         </div>
     )
