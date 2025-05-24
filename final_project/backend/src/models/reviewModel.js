@@ -1,5 +1,15 @@
 import firestore from '../firebase/firebase.js';
-import { getDocs, setDoc, addDoc, deleteDoc, collection, doc, query, orderBy, serverTimestamp, Timestamp } from 'firebase/firestore';
+import { 
+    getDocs,
+    setDoc,
+    addDoc,
+    deleteDoc,
+    collection,
+    doc,
+    query,
+    orderBy,
+    serverTimestamp,
+    Timestamp } from 'firebase/firestore';
 
 export default class Review {
     static async getAllReviews() {
@@ -14,6 +24,7 @@ export default class Review {
     }
 
     static async createReview(review) {
+        
         const collectionRef = collection(firestore, "reviews");
         const payload = {
             content: review.content,

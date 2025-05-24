@@ -28,14 +28,9 @@ export default function ReviewForm({oldId, oldTitle, oldRating, oldReviewText, o
             formData.append('reviewer', 'Anonymous');
             formData.append('rating', rating);
             formData.append('title', title);
-            createdAt === null ? formData.append('createdAt', serverTimestamp()) :
-                                  formData.append('createdAt', createdAt);
+            !createdAt ? null : formData.append('createdAt', createdAt);
 
-            for (const [key, value] of formData.entries()) {
-            console.log(`${key}: ${value}`);
-        }
-
-            const response = isEditing === false ? 
+            const response = !isEditing ? 
                 await axios.post(
                     "http://localhost:8080/reviews/",
                     formData
